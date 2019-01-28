@@ -1,8 +1,17 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import cors from 'cors';
+import errorHandler from 'errorhandler';
+import path from 'path'
 
-var models = require("./models");
+import models from "./models";
+import routes from './routes'
 
-//Sync Database
+const app = express();
+const PORT = 5000;
+const isProduction = process.env.NODE_ENV === 'production';
+
 models.sequelize.sync().then(function() {
 
     console.log('Nice! Database looks fine')
@@ -13,17 +22,43 @@ models.sequelize.sync().then(function() {
 
 });
 
-const app = express();
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret: 'secret_key', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false })); //TO-DO ADD SECRET KEY
 
-app.get('/api/v1/test', (req, res) => {
-    res.status(200).send({
-        success: 'true',
-        message: 'todos retrieved successfully',
-        test: 'test'
-    })
+require('./models/user');
+require('./config/passport');
+app.use(routes);
+
+if(!isProduction) {
+    app.use(errorHandler());
+}
+
+if(!isProduction) {
+    app.use((req, res, err) => {
+        res.status(err.status || 500);
+
+        res.json({
+            errors: {
+                message: err.message,
+                error: err,
+            },
+        });
+    });
+}
+
+app.use((req, res, err) => {
+    res.status(err.status || 500);
+
+    res.json({
+        errors: {
+            message: err.message,
+            error: {},
+        },
+    });
 });
-
-const PORT = 5000;
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
