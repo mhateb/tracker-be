@@ -4,7 +4,7 @@ import express from 'express';
 const router = express.Router();
 
 import auth from '../auth';
-import Users from '../../models/user'
+import models from '../../models'
 
 router.post('/', auth.optional, (req, res) => {
     const { body: { user } } = req;
@@ -25,12 +25,26 @@ router.post('/', auth.optional, (req, res) => {
         });
     }
 
-    const finalUser = new Users(user);
-
-    finalUser.setPassword(user.password);
-
-    return finalUser.save()
-        .then(() => res.json({ user: finalUser.toAuthJSON() }));
+    models.user.findOrCreate({
+        where: {
+            email: user.email
+        },
+        defaults: {
+            salt: "salt",
+            hash: user.password
+        }
+    })
+        .spread(function (newUser, created) {
+            if (created) {
+                res.json({ user:newUser.toAuthJSON() })
+            } else {
+                res.status(422).json({
+                    errors: {
+                        email: 'email is already taken'
+                    }
+                })
+            }
+        })
 });
 
 router.post('/login', auth.optional, (req, res, next) => {
@@ -71,7 +85,7 @@ router.post('/login', auth.optional, (req, res, next) => {
 router.get('/current', auth.required, (req, res) => {
     const { payload: { id } } = req;
 
-    return Users.findById(id)
+    return models.user.findById(id)
         .then((user) => {
             if(!user) {
                 return res.sendStatus(400);
