@@ -1,32 +1,31 @@
-export default function(sequelize, Sequelize) {
+export default function (sequelize, Sequelize) {
+  return sequelize.define('pack', {
 
-    return sequelize.define('pack', {
+    id: {
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER
+    },
 
-        id: {
-            autoIncrement: true,
-            primaryKey: true,
-            type: Sequelize.INTEGER
-        },
+    title: {
+      type: Sequelize.TEXT
+    },
 
-        title: {
-            type: Sequelize.TEXT
-        },
+    fk_user_id: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
 
-        fk_user_id: {
-            type: Sequelize.INTEGER,
-            references: {
-                model: 'users',
-                key: 'id',
-            },
-        },
+    created_at: {
+      type: Sequelize.DATE
+    },
 
-        created_at: {
-            type: Sequelize.DATE
-        },
+    updated_at: {
+      type: Sequelize.DATE
+    }
 
-        updated_at: {
-            type: Sequelize.DATE
-        }
-
-    });
+  })
 }
