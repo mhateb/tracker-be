@@ -6,7 +6,7 @@ import models from '../../models'
 
 const router = express.Router()
 
-router.post('/', auth.optional, (req, res) => {
+router.post('/register', auth.optional, (req, res) => {
   const { body: { user } } = req
 
   if (!user.email) {
@@ -66,35 +66,25 @@ router.post('/login', auth.optional, (req, res, next) => {
     })
   }
 
-  return passport.authenticate('local', { session: false }, (err, passportUser) => {
-    if (err) {
-      return next(err)
+  models.user.findOne({
+    where: {
+      email: user.email
     }
-
-    if (passportUser) {
-      const user = passportUser
-      user.token = passportUser.generateJWT()
-
-      return res.json({ user: user.toAuthJSON() })
-    }
-
-    return status(400).info
-  })(req, res, next)
+  })
+      .then(foundUser => {
+        if (foundUser == null){
+          res.status(401).json({message:"no such user found"});
+        } else {
+          foundUser.validatePassword(user.password)
+          ? res.status(200).json({user: foundUser.toAuthJSON()})
+          : res.status(401).json({message:"passwords did not match"})
+        }
+      })
 })
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   return res.json({
     user: req.user.toAuthJSON()
-  })
-})
-
-router.get('/secret', passport.authenticate('jwt', { session: false }), function (req, res) {
-  res.json({ message: 'Success! You can not see this without a token' })
-})
-
-router.get('/test', function (req, res) {
-  return res.json({
-    test: 'test'
   })
 })
 
