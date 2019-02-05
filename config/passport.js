@@ -1,18 +1,21 @@
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
+import {ExtractJwt, Strategy as JwtStrategy} from 'passport-jwt';
 
-import Users from '../models/user'
+import models from '../models'
 
-passport.use(new LocalStrategy({
-    usernameField: 'user[email]',
-    passwordField: 'user[password]',
-}, (email, password, done) => {
-    Users.findOne({ email })
-        .then((user) => {
-            if(!user || !user.validatePassword(password)) {
-                return done(null, false, { errors: { 'email or password': 'is invalid' } });
+const jwtOptions = {}
+
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = 'SECRET_KEY';
+
+passport.use(new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+    console.log('payload received', jwt_payload);
+    models.user.findById(jwt_payload.id)
+        .then(user => {
+            if (user) {
+                next(null, user);
+            } else {
+                next(null, false);
             }
-
-            return done(null, user);
-        }).catch(done);
+        })
 }));

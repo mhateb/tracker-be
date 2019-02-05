@@ -36,7 +36,7 @@ router.post('/', auth.optional, (req, res) => {
     })
         .spread(function (newUser, created) {
             if (created) {
-                res.json({ user:newUser.toAuthJSON() })
+                res.json({ user: newUser.toAuthJSON() })
             } else {
                 res.status(422).json({
                     errors: {
@@ -82,17 +82,14 @@ router.post('/login', auth.optional, (req, res, next) => {
     })(req, res, next);
 });
 
-router.get('/current', auth.required, (req, res) => {
-    const { payload: { id } } = req;
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+    return res.json({
+        user: req.user.toAuthJSON()
+    })
+});
 
-    return models.user.findById(id)
-        .then((user) => {
-            if(!user) {
-                return res.sendStatus(400);
-            }
-
-            return res.json({ user: user.toAuthJSON() });
-        });
+router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
+    res.json({message: "Success! You can not see this without a token"});
 });
 
 router.get('/test', function (req, res) {
