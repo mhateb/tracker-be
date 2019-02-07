@@ -1,5 +1,5 @@
 export default function (sequelize, Sequelize) {
-  return sequelize.define('pack', {
+  const Pack = sequelize.define('pack', {
 
     id: {
       autoIncrement: true,
@@ -17,15 +17,16 @@ export default function (sequelize, Sequelize) {
         model: 'users',
         key: 'id'
       }
-    },
-
-    created_at: {
-      type: Sequelize.DATE
-    },
-
-    updated_at: {
-      type: Sequelize.DATE
     }
-
   })
+
+  Pack.prototype.toAuthJSON = function () {
+    return {
+      id: this.id,
+      title: this.title,
+      user_id: this.fk_user_id
+    }
+  }
+
+  return Pack
 }

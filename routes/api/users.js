@@ -47,7 +47,7 @@ router.post('/register', auth.optional, (req, res) => {
     })
 })
 
-router.post('/login', auth.optional, (req, res, next) => {
+router.post('/login', auth.optional, (req, res) => {
   const { body: { user } } = req
 
   if (!user.email) {
@@ -71,15 +71,15 @@ router.post('/login', auth.optional, (req, res, next) => {
       email: user.email
     }
   })
-      .then(foundUser => {
-        if (foundUser == null){
-          res.status(401).json({message:"no such user found"});
-        } else {
-          foundUser.validatePassword(user.password)
-          ? res.status(200).json({user: foundUser.toAuthJSON()})
-          : res.status(401).json({message:"passwords did not match"})
-        }
-      })
+    .then(foundUser => {
+      if (foundUser == null) {
+        res.status(401).json({ message: 'no such user found' })
+      } else {
+        foundUser.validatePassword(user.password)
+          ? res.status(200).json({ user: foundUser.toAuthJSON() })
+          : res.status(401).json({ message: 'passwords did not match' })
+      }
+    })
 })
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
