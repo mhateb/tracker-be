@@ -46,6 +46,45 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
         packs: packs
       })
     })
+    .catch(function (error) {
+      res.status(500).json(error)
+    })
+})
+
+router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { body: { pack } } = req
+
+  models.pack.destroy({
+    where: {
+      title: pack.title,
+      fk_user_id: req.user.id
+    }
+  })
+    .then(function (deletedRecord) {
+      if (deletedRecord === 1) {
+        res.status(200).json({ message: 'Deleted successfully' })
+      } else {
+        res.status(404).json({ message: 'record not found' })
+      }
+    })
+    .catch(function (error) {
+      res.status(500).json(error)
+    })
+})
+
+router.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { body: { pack } } = req
+
+  models.pack.update(
+    { title: pack.title },
+    { where: { id: pack.id, fk_user_id: req.user.id } }
+  )
+    .then(result =>
+      res.status(200).json({ message: 'pack was updated' })
+    )
+    .catch(err =>
+      res.status(500).json(err)
+    )
 })
 
 export default router
