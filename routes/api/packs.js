@@ -56,7 +56,7 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
 
   models.pack.destroy({
     where: {
-      title: pack.title,
+      id: pack.id,
       fk_user_id: req.user.id
     }
   })
