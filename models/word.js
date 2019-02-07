@@ -1,5 +1,5 @@
 export default function (sequelize, Sequelize) {
-  return sequelize.define('word', {
+  const Word = sequelize.define('word', {
 
     id: {
       autoIncrement: true,
@@ -21,15 +21,17 @@ export default function (sequelize, Sequelize) {
         model: 'packs',
         key: 'id'
       }
-    },
-
-    created_at: {
-      type: Sequelize.DATE
-    },
-
-    updated_at: {
-      type: Sequelize.DATE
     }
-
   })
+
+  Word.prototype.toAuthJSON = () => {
+    return {
+      id: this.id,
+      original: this.original,
+      translate: this.translate,
+      fk_pack_id: this.fk_pack_id
+    }
+  }
+
+  return Word
 }
