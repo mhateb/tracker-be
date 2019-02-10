@@ -4,9 +4,11 @@ import passport from 'passport'
 import cors from 'cors'
 import errorHandler from 'errorhandler'
 import path from 'path'
+import swaggerUi from 'swagger-ui-express'
 
 import models from './models'
 import routes from './routes'
+import swaggerDocument from './config/swagger'
 
 const app = express()
 const PORT = 5000
@@ -28,6 +30,8 @@ app.use(passport.initialize())
 
 require('./models/user')
 require('./config/passport')
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(routes)
 
 if (!isProduction) {
