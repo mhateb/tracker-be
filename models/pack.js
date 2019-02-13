@@ -8,7 +8,11 @@ export default function (sequelize, Sequelize) {
     },
 
     title: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      validate: {
+        notEmpty: true,
+        notNull: true
+      }
     },
 
     fk_user_id: {
@@ -16,6 +20,11 @@ export default function (sequelize, Sequelize) {
       references: {
         model: 'users',
         key: 'id'
+      },
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isInt: true
       }
     }
   })

@@ -21,17 +21,21 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
       title: pack.title,
       fk_user_id: req.user.id
     }
+  }).spread(function (newPack, created) {
+    if (created) {
+      res.json({ pack: newPack.toAuthJSON() })
+    } else {
+      res.status(422).json({
+        errors: {
+          email: 'pack is already taken'
+        }
+      })
+    }
   })
-    .spread(function (newPack, created) {
-      if (created) {
-        res.json({ pack: newPack.toAuthJSON() })
-      } else {
-        res.status(422).json({
-          errors: {
-            email: 'pack is already taken'
-          }
-        })
-      }
+    .catch(function (err) {
+      res.json({ err: err.errors.map(function (e) {
+        return e.message
+      }) })
     })
 })
 
@@ -40,14 +44,15 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     where: {
       fk_user_id: req.user.id
     }
-  })
-    .then(packs => {
-      res.json({
-        packs: packs
-      })
+  }).then(packs => {
+    res.json({
+      packs: packs
     })
-    .catch(function (error) {
-      res.status(500).json(error)
+  })
+    .catch(function (err) {
+      res.json({ err: err.errors.map(function (e) {
+        return e.message
+      }) })
     })
 })
 
@@ -59,16 +64,17 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
       id: pack.id,
       fk_user_id: req.user.id
     }
+  }).then(function (deletedRecord) {
+    if (deletedRecord === 1) {
+      res.status(200).json({ message: 'Deleted successfully' })
+    } else {
+      res.status(404).json({ message: 'record not found' })
+    }
   })
-    .then(function (deletedRecord) {
-      if (deletedRecord === 1) {
-        res.status(200).json({ message: 'Deleted successfully' })
-      } else {
-        res.status(404).json({ message: 'record not found' })
-      }
-    })
-    .catch(function (error) {
-      res.status(500).json(error)
+    .catch(function (err) {
+      res.json({ err: err.errors.map(function (e) {
+        return e.message
+      }) })
     })
 })
 
@@ -78,13 +84,14 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
   models.pack.update(
     { title: pack.title },
     { where: { id: pack.id, fk_user_id: req.user.id } }
+  ).then(result =>
+    res.status(200).json({ message: 'pack was updated' })
   )
-    .then(result =>
-      res.status(200).json({ message: 'pack was updated' })
-    )
-    .catch(err =>
-      res.status(500).json(err)
-    )
+    .catch(function (err) {
+      res.json({ err: err.errors.map(function (e) {
+        return e.message
+      }) })
+    })
 })
 
 export default router
