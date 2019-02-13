@@ -15,10 +15,10 @@ const PORT = 5000
 const isProduction = process.env.NODE_ENV === 'production'
 
 models.sequelize.sync()
-  .then(function () {
+  .then(() => {
     console.log('Nice! Database looks fine')
   })
-  .catch(function (err) {
+  .catch((err) => {
     console.log(err, 'Something went wrong with the Database Update!')
   })
 
@@ -31,7 +31,7 @@ app.use(passport.initialize())
 require('./models/user')
 require('./config/passport')
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(routes)
 
 if (!isProduction) {

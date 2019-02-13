@@ -2,6 +2,7 @@ import passport from 'passport'
 import express from 'express'
 
 import models from '../../models'
+import { getMessageError } from '../../utils/errors'
 
 const router = express.Router()
 
@@ -21,7 +22,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
       title: pack.title,
       fk_user_id: req.user.id
     }
-  }).spread(function (newPack, created) {
+  }).spread((newPack, created) => {
     if (created) {
       res.json({ pack: newPack.toAuthJSON() })
     } else {
@@ -32,10 +33,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
       })
     }
   })
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
@@ -49,10 +48,8 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
       packs: packs
     })
   })
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
@@ -64,17 +61,15 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
       id: pack.id,
       fk_user_id: req.user.id
     }
-  }).then(function (deletedRecord) {
+  }).then((deletedRecord) => {
     if (deletedRecord === 1) {
       res.status(200).json({ message: 'Deleted successfully' })
     } else {
       res.status(404).json({ message: 'record not found' })
     }
   })
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
@@ -87,10 +82,8 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
   ).then(result =>
     res.status(200).json({ message: 'pack was updated' })
   )
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 

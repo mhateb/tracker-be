@@ -2,35 +2,12 @@ import passport from 'passport'
 import express from 'express'
 
 import models from '../../models'
+import { getMessageError } from '../../utils/errors'
 
 const router = express.Router()
 
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { word } } = req
-
-  if (!word.original) {
-    return res.status(422).json({
-      errors: {
-        original: 'is required'
-      }
-    })
-  }
-
-  if (!word.translate) {
-    return res.status(422).json({
-      errors: {
-        translate: 'is required'
-      }
-    })
-  }
-
-  if (!word.pack_id) {
-    return res.status(422).json({
-      errors: {
-        pack_id: 'is required'
-      }
-    })
-  }
 
   models.word.findOrCreate({
     where: {
@@ -38,7 +15,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
       translate: word.translate,
       fk_pack_id: word.pack_id
     }
-  }).spread(function (newWord, created) {
+  }).spread((newWord, created) => {
     if (created) {
       res.json({ word: newWord.toAuthJSON() })
     } else {
@@ -49,10 +26,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
       })
     }
   })
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
@@ -69,9 +44,7 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     })
   })
     .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+      getMessageError(res, err)
     })
 })
 
@@ -83,17 +56,15 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
       id: word.id,
       fk_pack_id: word.pack_id
     }
-  }).then(function (deletedRecord) {
+  }).then((deletedRecord) => {
     if (deletedRecord === 1) {
       res.status(200).json({ message: 'Deleted successfully' })
     } else {
       res.status(404).json({ message: 'record not found' })
     }
   })
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
@@ -106,10 +77,8 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
   ).then(result =>
     res.status(200).json({ message: 'word was updated' })
   )
-    .catch(function (err) {
-      res.json({ err: err.errors.map(function (e) {
-        return e.message
-      }) })
+    .catch((err) => {
+      getMessageError(res, err)
     })
 })
 
