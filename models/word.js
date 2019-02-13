@@ -8,11 +8,19 @@ export default function (sequelize, Sequelize) {
     },
 
     original: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      validate: {
+        notEmpty: true,
+        notNull: true
+      }
     },
 
     translate: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      validate: {
+        notEmpty: true,
+        notNull: true
+      }
     },
 
     fk_pack_id: {
@@ -20,6 +28,11 @@ export default function (sequelize, Sequelize) {
       references: {
         model: 'packs',
         key: 'id'
+      },
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isInt: true
       }
     }
   })
