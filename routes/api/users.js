@@ -33,18 +33,21 @@ router.post('/register', auth.optional, (req, res) => {
       salt: 'salt',
       hash: user.password
     }
+  }).spread(function (newUser, created) {
+    if (created) {
+      res.json({ user: newUser.toAuthJSON() })
+    } else {
+      res.status(422).json({
+        errors: {
+          email: 'email is already taken'
+        }
+      })
+    }
+  }).catch(function (err) {
+    res.json({ err: err.errors.map(function (e) {
+      return e.message
+    }) })
   })
-    .spread(function (newUser, created) {
-      if (created) {
-        res.json({ user: newUser.toAuthJSON() })
-      } else {
-        res.status(422).json({
-          errors: {
-            email: 'email is already taken'
-          }
-        })
-      }
-    })
 })
 
 router.post('/login', auth.optional, (req, res) => {
@@ -70,16 +73,19 @@ router.post('/login', auth.optional, (req, res) => {
     where: {
       email: user.email
     }
+  }).then(foundUser => {
+    if (foundUser == null) {
+      res.status(401).json({ message: 'no such user found' })
+    } else {
+      foundUser.validatePassword(user.password)
+        ? res.status(200).json({ user: foundUser.toAuthJSON() })
+        : res.status(401).json({ message: 'passwords did not match' })
+    }
+  }).catch(function (err) {
+    res.json({ err: err.errors.map(function (e) {
+      return e.message
+    }) })
   })
-    .then(foundUser => {
-      if (foundUser == null) {
-        res.status(401).json({ message: 'no such user found' })
-      } else {
-        foundUser.validatePassword(user.password)
-          ? res.status(200).json({ user: foundUser.toAuthJSON() })
-          : res.status(401).json({ message: 'passwords did not match' })
-      }
-    })
 })
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {

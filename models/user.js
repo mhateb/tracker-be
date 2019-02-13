@@ -17,7 +17,8 @@ export default function (sequelize, Sequelize) {
     email: {
       type: Sequelize.STRING,
       validate: {
-        isEmail: true
+        isEmail: true,
+        len: [2, 100]
       },
       get () {
         return this.getDataValue('email')
