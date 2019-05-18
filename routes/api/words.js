@@ -27,11 +27,13 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     }
   })
     .catch((err) => {
+      console.log(err)
+      
       getMessageError(res, err)
     })
 })
 
-router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
   models.word.findAll({

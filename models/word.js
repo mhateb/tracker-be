@@ -1,6 +1,5 @@
 export default function (sequelize, Sequelize) {
   const Word = sequelize.define('word', {
-
     id: {
       autoIncrement: true,
       primaryKey: true,
@@ -11,7 +10,6 @@ export default function (sequelize, Sequelize) {
       type: Sequelize.TEXT,
       validate: {
         notEmpty: true,
-        notNull: true
       }
     },
 
@@ -19,7 +17,6 @@ export default function (sequelize, Sequelize) {
       type: Sequelize.TEXT,
       validate: {
         notEmpty: true,
-        notNull: true
       }
     },
 
@@ -31,13 +28,12 @@ export default function (sequelize, Sequelize) {
       },
       validate: {
         notEmpty: true,
-        notNull: true,
         isInt: true
       }
     }
   })
 
-  Word.prototype.toAuthJSON = () => {
+  Word.prototype.toAuthJSON = function() {
     return {
       id: this.id,
       original: this.original,

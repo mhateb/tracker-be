@@ -56,6 +56,17 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
 router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
+  if (pack.words.length > 0) {
+    pack.words.forEach(word => {
+      models.word.destroy({
+        where: {
+          id: word.id,
+          fk_pack_id: pack.id
+        }
+      })
+    })
+  }
+
   models.pack.destroy({
     where: {
       id: pack.id,

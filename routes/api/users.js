@@ -24,7 +24,8 @@ router.post('/register', auth.optional, (req, res) => {
     } else {
       res.status(422).json({
         errors: {
-          email: 'email is already taken'
+          email: 'email is already taken',
+          status: 422
         }
       })
     }
@@ -42,7 +43,7 @@ router.post('/login', auth.optional, (req, res) => {
     }
   }).then(foundUser => {
     if (foundUser == null) {
-      res.status(401).json({ message: 'no such user found' })
+      res.status(401).json({ message: 'no such user found', status: 401 })
     } else {
       foundUser.validatePassword(user.password)
         ? res.status(200).json({ user: foundUser.toAuthJSON() })

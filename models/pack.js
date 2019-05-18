@@ -11,7 +11,6 @@ export default function (sequelize, Sequelize) {
       type: Sequelize.TEXT,
       validate: {
         notEmpty: true,
-        notNull: true
       }
     },
 
@@ -23,7 +22,6 @@ export default function (sequelize, Sequelize) {
       },
       validate: {
         notEmpty: true,
-        notNull: true,
         isInt: true
       }
     }
