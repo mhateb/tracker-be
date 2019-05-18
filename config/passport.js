@@ -3,10 +3,10 @@ import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 import models from '../models'
 
-const jwtOptions = {}
-
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
-jwtOptions.secretOrKey = 'SECRET_KEY'
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'SECRET_KEY'
+}
 
 passport.use(new JwtStrategy(jwtOptions, function (jwtPayload, next) {
   console.log('payload received', jwtPayload)
