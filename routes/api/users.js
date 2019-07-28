@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/register', auth.optional, (req, res) => {
   const { body: { user } } = req
 
-  models.user.findOrCreate({
+  models.User.findOrCreate({
     where: {
       email: user.email
     },
@@ -18,44 +18,48 @@ router.post('/register', auth.optional, (req, res) => {
       salt: 'salt',
       hash: user.password
     }
-  }).spread((newUser, created) => {
-    if (created) {
-      res.json({ user: newUser.toAuthJSON() })
-    } else {
-      res.status(422).json({
-        errors: {
-          email: 'email is already taken'
-        }
-      })
-    }
-  }).catch((err) => {
-    getMessageError(res, err)
   })
+    .spread((newUser, created) => {
+      if (created) {
+        res.json({ user: newUser.toJSON() })
+      } else {
+        res.status(422).json({
+          errors: {
+            email: 'email is already taken'
+          }
+        })
+      }
+    })
+    .catch((err) => {
+      getMessageError(res, err)
+    })
 })
 
 router.post('/login', auth.optional, (req, res) => {
   const { body: { user } } = req
 
-  models.user.findOne({
+  models.User.findOne({
     where: {
       email: user.email
     }
-  }).then(foundUser => {
-    if (foundUser == null) {
-      res.status(401).json({ message: 'no such user found' })
-    } else {
-      foundUser.validatePassword(user.password)
-        ? res.status(200).json({ user: foundUser.toAuthJSON() })
-        : res.status(401).json({ message: 'passwords did not match' })
-    }
-  }).catch((err) => {
-    getMessageError(res, err)
   })
+    .then(foundUser => {
+      if (foundUser == null) {
+        res.status(401).json({ message: 'no such user found' })
+      } else {
+        foundUser.validatePassword(user.password)
+          ? res.status(200).json({ user: foundUser.toJSON() })
+          : res.status(401).json({ message: 'passwords did not match' })
+      }
+    })
+    .catch((err) => {
+      getMessageError(res, err)
+    })
 })
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   return res.json({
-    user: req.user.toAuthJSON()
+    user: req.user.toJSON()
   })
 })
 

@@ -1,41 +1,45 @@
-export default function (sequelize, Sequelize) {
-  const Pack = sequelize.define('pack', {
+import { Model } from "sequelize";
 
-    id: {
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-
-    title: {
-      type: Sequelize.TEXT,
-      validate: {
-        notEmpty: true,
-        notNull: true
-      }
-    },
-
-    fk_user_id: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      validate: {
-        notEmpty: true,
-        notNull: true,
-        isInt: true
-      }
-    }
-  })
-
-  Pack.prototype.toAuthJSON = function () {
+class Pack extends Model {
+  toJSON = () => {
     return {
       id: this.id,
       title: this.title,
-      user_id: this.fk_user_id
+      userId: this.userId
     }
   }
 
-  return Pack
+  static init(sequelize, DataTypes) {
+    return super.init(
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true
+        },
+        title: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            notEmpty: true
+          }
+        }
+      },
+      { 
+        tableName: "packs",
+        sequelize
+      }
+    )
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, {
+      foreignKey: {
+        name: "id",
+        allowNull: true
+      }
+    });
+  }
 }
+
+export default Pack

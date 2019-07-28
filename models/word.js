@@ -1,50 +1,53 @@
-export default function (sequelize, Sequelize) {
-  const Word = sequelize.define('word', {
+import { Model } from "sequelize";
 
-    id: {
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-
-    original: {
-      type: Sequelize.TEXT,
-      validate: {
-        notEmpty: true,
-        notNull: true
-      }
-    },
-
-    translate: {
-      type: Sequelize.TEXT,
-      validate: {
-        notEmpty: true,
-        notNull: true
-      }
-    },
-
-    fk_pack_id: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'packs',
-        key: 'id'
-      },
-      validate: {
-        notEmpty: true,
-        notNull: true,
-        isInt: true
-      }
-    }
-  })
-
-  Word.prototype.toAuthJSON = () => {
+class Word extends Model {
+  toJSON = () => {
     return {
       id: this.id,
       original: this.original,
       translate: this.translate,
-      fk_pack_id: this.fk_pack_id
+      fk_pack_id: this.packId
     }
   }
 
-  return Word
+  static init(sequelize, DataTypes) {
+    return super.init(
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true
+        },
+        original: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+          validate: {
+            notEmpty: true
+          }
+        },
+        translate: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+          validate: {
+            notEmpty: true
+          }
+        },
+      },
+      {
+        tableName: "words",
+        sequelize
+      }
+    )
+  }
+
+  static associate(models) {
+    this.belongsTo(models.Pack, {
+      foreignKey: {
+        name: "id",
+        allowNull: true
+      }
+    });
+  }
 }
+
+export default Word
