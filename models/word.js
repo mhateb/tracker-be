@@ -6,7 +6,7 @@ class Word extends Model {
       id: this.id,
       original: this.original,
       translate: this.translate,
-      fk_pack_id: this.packId
+      packId: this.packId
     }
   }
 
@@ -43,7 +43,7 @@ class Word extends Model {
   static associate(models) {
     this.belongsTo(models.Pack, {
       foreignKey: {
-        name: "id",
+        name: "packId",
         allowNull: true
       }
     });

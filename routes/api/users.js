@@ -15,11 +15,14 @@ router.post('/register', auth.optional, (req, res) => {
       email: user.email
     },
     defaults: {
+      username: user.username,
       salt: 'salt',
       hash: user.password
     }
   })
-    .spread((newUser, created) => {
+    .then(([newUser, created]) => {
+      console.log(newUser)
+      console.log(created)
       if (created) {
         res.json({ user: newUser.toJSON() })
       } else {
@@ -31,6 +34,7 @@ router.post('/register', auth.optional, (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err)
       getMessageError(res, err)
     })
 })

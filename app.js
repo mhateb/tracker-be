@@ -38,29 +38,16 @@ if (!isProduction) {
   app.use(errorHandler())
 }
 
-if (!isProduction) {
-  app.use((req, res, err) => {
-    res.status(err.status || 500)
+app.use((req, res, err) => {
+  res.status(err.status || 500)
 
-    res.json({
-      errors: {
-        message: err.message,
-        error: err
-      }
-    })
+  res.json({
+    errors: {
+      message: err.message,
+      error: err
+    }
   })
-} else {
-  app.use((req, res, err) => {
-    res.status(err.status || 500)
-
-    res.json({
-      errors: {
-        message: err.message,
-        error: err
-      }
-    })
-  })
-}
+})
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)

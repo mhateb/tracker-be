@@ -20,7 +20,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
   models.Pack.findOrCreate({
     where: {
       title: pack.title,
-      fk_user_id: req.user.id
+      userId: req.user.id
     }
   })
     .spread((newPack, created) => {
@@ -42,7 +42,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
   models.Pack.findAll({
     where: {
-      fk_user_id: req.user.id
+      userId: req.user.id
     }
   })
     .then(packs => {
@@ -51,6 +51,7 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
       })
     })
     .catch((err) => {
+      console.log(err)
       getMessageError(res, err)
     })
 })
@@ -61,7 +62,7 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
   models.Pack.destroy({
     where: {
       id: pack.id,
-      fk_user_id: req.user.id
+      userId: req.user.id
     }
   })
     .then((deletedRecord) => {
@@ -81,7 +82,7 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
 
   models.Pack.update(
     { title: pack.title },
-    { where: { id: pack.id, fk_user_id: req.user.id } }
+    { where: { id: pack.id, userId: req.user.id } }
   )
     .then(result =>
       res.status(200).json({ message: 'pack was updated' })

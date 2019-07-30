@@ -35,7 +35,7 @@ class Pack extends Model {
   static associate(models) {
     this.belongsTo(models.User, {
       foreignKey: {
-        name: "id",
+        name: "userId",
         allowNull: true
       }
     });

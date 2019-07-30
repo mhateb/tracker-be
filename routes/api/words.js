@@ -13,7 +13,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     where: {
       original: word.original,
       translate: word.translate,
-      fk_pack_id: word.pack_id
+      packId: word.pack_id
     }
   })
     .spread((newWord, created) => {
@@ -32,12 +32,12 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     })
 })
 
-router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
   models.Word.findAll({
     where: {
-      fk_pack_id: pack.id
+      packId: pack.id
     }
   })
     .then(words => {
@@ -56,7 +56,7 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
   models.Word.destroy({
     where: {
       id: word.id,
-      fk_pack_id: word.pack_id
+      packId: word.pack_id
     }
   })
     .then((deletedRecord) => {
@@ -76,7 +76,7 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
 
   models.Word.update(
     { original: word.original, translate: word.translate },
-    { where: { id: word.id, fk_pack_id: word.pack_id } }
+    { where: { id: word.id, packId: word.pack_id } }
   )
     .then(result =>
       res.status(200).json({ message: 'word was updated' })

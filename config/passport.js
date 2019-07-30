@@ -10,7 +10,7 @@ jwtOptions.secretOrKey = 'SECRET_KEY'
 
 passport.use(new JwtStrategy(jwtOptions, function (jwtPayload, next) {
   console.log('payload received', jwtPayload)
-  models.user.findById(jwtPayload.id)
+  models.User.findById(jwtPayload.id)
     .then(user => {
       if (user) {
         next(null, user)

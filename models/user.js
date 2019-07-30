@@ -47,7 +47,7 @@ class User extends Model {
           }
         },
         hash: {
-          type: DataTypes.STRING,
+          type: DataTypes.STRING(1024),
           allowNull: false,
           set (val) {
             this.setDataValue('hash', crypto.pbkdf2Sync(val, this.salt, 10000, 512, 'sha512').toString('hex'))
@@ -64,12 +64,8 @@ class User extends Model {
       { 
         tableName: "users",
         sequelize
-      }
+      },
     );
-  }
-
-  static associate(models) {
-    this.hasMany(models.Pack);
   }
 }
 
