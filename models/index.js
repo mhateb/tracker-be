@@ -6,7 +6,7 @@ import Word from "./word";
 import configJSON from '../config/config'
 
 const env = process.env.NODE_ENV || 'development'
-const config = configJSON[env]
+const config = configJSON['development']
 const sequelize = new Sequelize(config.database, config.username, config.password, config)
 
 const models = {
