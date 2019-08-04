@@ -2,13 +2,13 @@
 
   "development": {
 
-    "username": "tracker_admin",
+    "username": "qunnomeanqnoxn",
 
-    "password": "esenin1923",
+    "password": "56d36042f42dd894377b6eae5e46d396a50dca40c6e6c9ebd120b046e40e281d",
 
-    "database": "tracker_db",
+    "database": "d7ckpv6qd5o3kr",
 
-    "host": "127.0.0.1",
+    "host": "ec2-107-20-185-16.compute-1.amazonaws.com",
 
     "dialect": "postgres"
 
