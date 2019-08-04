@@ -21,9 +21,14 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     where: {
       title: pack.title,
       userId: req.user.id
+    },
+    defaults: {
+      trueAnswers: 0,
+      falseAnswers: 0,
+      rating: 0
     }
   })
-    .spread((newPack, created) => {
+    .then(([newPack, created]) => {
       if (created) {
         res.json({ pack: newPack.toJSON() })
       } else {
@@ -84,7 +89,7 @@ router.post('/update', passport.authenticate('jwt', { session: false }), (req, r
     { title: pack.title },
     { where: { id: pack.id, userId: req.user.id } }
   )
-    .then(result =>
+    .then(() =>
       res.status(200).json({ message: 'pack was updated' })
     )
     .catch((err) => {

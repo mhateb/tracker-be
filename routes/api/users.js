@@ -21,8 +21,6 @@ router.post('/register', auth.optional, (req, res) => {
     }
   })
     .then(([newUser, created]) => {
-      console.log(newUser)
-      console.log(created)
       if (created) {
         res.json({ user: newUser.toJSON() })
       } else {

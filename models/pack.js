@@ -5,7 +5,10 @@ class Pack extends Model {
     return {
       id: this.id,
       title: this.title,
-      userId: this.userId
+      userId: this.userId,
+      trueAnswers: this.trueAnswers,
+      falseAnswers: this.falseAnswers,
+      rating: this.rating
     }
   }
 
@@ -23,6 +26,18 @@ class Pack extends Model {
           validate: {
             notEmpty: true
           }
+        },
+        trueAnswers: {
+          type: DataTypes.INTEGER,
+          allowNull: false    
+        },
+        falseAnswers: {
+          type: DataTypes.INTEGER,
+          allowNull: false
+        },
+        rating: {
+          type: DataTypes.INTEGER,
+          allowNull: false  
         }
       },
       { 
