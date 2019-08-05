@@ -1,45 +1,25 @@
 {
 
-  "development": {
-
+  "production": {
     "username": "qunnomeanqnoxn",
-
     "password": "56d36042f42dd894377b6eae5e46d396a50dca40c6e6c9ebd120b046e40e281d",
-
     "database": "d7ckpv6qd5o3kr",
-
     "host": "ec2-107-20-185-16.compute-1.amazonaws.com",
-
     "dialect": "postgres"
-
   },
 
   "test": {
-
     "username": "",
-
     "password": null,
-
     "database": "",
-
     "host": "",
-
     "dialect": "postgres"
-
   },
-
-  "production": {
-
-    "username": "",
-
-    "password": null,
-
-    "database": "",
-
+  "development": {
+    "username": "tracker_admin",
+    "password": "esenin1923",
+    "database": "tracker_db",
     "host": "127.0.0.1",
-
     "dialect": "postgres"
-
   }
-
 }

@@ -22,9 +22,14 @@ models.sequelize.sync()
     console.log(err, 'Something went wrong with the Database Update!')
   })
 
-app.use(cors({
-  origin: 'https://tracker-fe.herokuapp.com'
-}))
+if (isProduction) {
+  app.use(cors({
+    origin: 'https://tracker-fe.herokuapp.com'
+  }))
+} else {
+  app.use(cors())
+}
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
