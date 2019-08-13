@@ -16,9 +16,9 @@
     "dialect": "postgres"
   },
   "development": {
-    "username": "tracker_admin",
+    "username": "kulinar_admin",
     "password": "esenin1923",
-    "database": "tracker_db",
+    "database": "kulinar_db",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }

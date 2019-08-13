@@ -1,13 +1,13 @@
 import express from 'express'
 
 import usersRouter from './users'
-import packsRouter from './packs'
-import wordsRouter from './words'
+import recipesRouter from './recipes'
+import dictRouter from './dict'
 
 const router = express.Router()
 
 router.use('/users', usersRouter)
-router.use('/packs', packsRouter)
-router.use('/words', wordsRouter)
+router.use('/recipes', recipesRouter)
+router.use('/dict', dictRouter)
 
 export default router

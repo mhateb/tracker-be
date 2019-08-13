@@ -1,6 +1,6 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
-class Word extends Model {
+class Recipe extends Model {
   toJSON = () => {
     return {
       id: this.id,
@@ -10,7 +10,7 @@ class Word extends Model {
     }
   }
 
-  static init(sequelize, DataTypes) {
+  static init (sequelize, DataTypes) {
     return super.init(
       {
         id: {
@@ -18,36 +18,43 @@ class Word extends Model {
           autoIncrement: true,
           primaryKey: true
         },
-        original: {
+        title: {
           type: DataTypes.TEXT,
           allowNull: false,
           validate: {
             notEmpty: true
           }
         },
-        translate: {
+        miniDescription: {
           type: DataTypes.TEXT,
           allowNull: false,
           validate: {
             notEmpty: true
           }
         },
+        description: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+          validate: {
+            notEmpty: true
+          }
+        }
       },
       {
-        tableName: "words",
+        tableName: 'recipes',
         sequelize
       }
     )
   }
 
-  static associate(models) {
+  static associate (models) {
     this.belongsTo(models.Pack, {
       foreignKey: {
-        name: "packId",
+        name: 'packId',
         allowNull: true
       }
-    });
+    })
   }
 }
 
-export default Word
+export default Recipe

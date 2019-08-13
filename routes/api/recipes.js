@@ -9,14 +9,6 @@ const router = express.Router()
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
-  if (!pack.title) {
-    return res.status(422).json({
-      errors: {
-        title: 'is required'
-      }
-    })
-  }
-
   models.Pack.findOrCreate({
     where: {
       title: pack.title,
@@ -44,7 +36,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     })
 })
 
-router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   models.Pack.findAll({
     where: {
       userId: req.user.id
@@ -61,7 +53,7 @@ router.get('/all', passport.authenticate('jwt', { session: false }), (req, res) 
     })
 })
 
-router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
   models.Pack.destroy({
@@ -82,7 +74,7 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
     })
 })
 
-router.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
   models.Pack.update(
