@@ -29,9 +29,17 @@ class User extends Model {
           primaryKey: true,
           autoIncrement: true
         },
-        firstName: {
+        username: {
           type: DataTypes.STRING,
           unique: true,
+          allowNull: true,
+          validate: {
+            min: 6,
+            max: 20
+          }
+        },
+        firstName: {
+          type: DataTypes.STRING,
           allowNull: false,
           validate: {
             min: 6,
@@ -40,7 +48,6 @@ class User extends Model {
         },
         lastName: {
           type: DataTypes.STRING,
-          unique: true,
           allowNull: false,
           validate: {
             min: 6,
@@ -50,7 +57,7 @@ class User extends Model {
         about: {
           type: DataTypes.STRING,
           unique: true,
-          allowNull: false,
+          allowNull: true,
           validate: {
             min: 6,
             max: 20
@@ -58,6 +65,8 @@ class User extends Model {
         },
         email: {
           type: DataTypes.STRING,
+          unique: true,
+          allowNull: false,
           validate: {
             isEmail: true,
             min: 2,

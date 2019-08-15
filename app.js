@@ -6,7 +6,7 @@ import errorHandler from 'errorhandler'
 import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 
-import models from './models'
+import models from './db/models'
 import routes from './routes'
 import swaggerDocument from './config/swagger'
 
@@ -35,7 +35,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 
-require('./models/user')
+require('./db/models/user')
 require('./config/passport')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))

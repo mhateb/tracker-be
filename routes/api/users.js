@@ -2,13 +2,15 @@ import passport from 'passport'
 import express from 'express'
 
 import auth from '../auth'
-import models from '../../models'
+import models from '../../db/models'
 import { getMessageError } from '../../utils/errors'
 
 const router = express.Router()
 
 router.post('/register', auth.optional, (req, res) => {
   const { body: { user } } = req
+
+  console.log(req.body)
 
   models.User.findOrCreate({
     where: {
@@ -17,7 +19,10 @@ router.post('/register', auth.optional, (req, res) => {
     defaults: {
       username: user.username,
       salt: 'salt',
-      hash: user.password
+      hash: user.password,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      about: 'about hahahah'
     }
   })
     .then(([newUser, created]) => {

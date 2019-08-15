@@ -1,8 +1,8 @@
 import passport from 'passport'
 import express from 'express'
 
-import models from '../../models'
-import { getMessageError } from '../../utils/errors'
+import models from '../../../db/models'
+import { getMessageError } from '../../../utils/errors'
 
 const router = express.Router()
 

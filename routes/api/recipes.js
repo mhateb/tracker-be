@@ -1,7 +1,7 @@
 import passport from 'passport'
 import express from 'express'
 
-import models from '../../models'
+import models from '../../db/models'
 import { getMessageError } from '../../utils/errors'
 
 const router = express.Router()
@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
-  models.Pack.findOrCreate({
+  models.Recipe.findOrCreate({
     where: {
       title: pack.title,
       userId: req.user.id
@@ -37,7 +37,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 })
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  models.Pack.findAll({
+  models.Recipe.findAll({
     where: {
       userId: req.user.id
     }
@@ -56,7 +56,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
-  models.Pack.destroy({
+  models.Recipe.destroy({
     where: {
       id: pack.id,
       userId: req.user.id
@@ -77,7 +77,7 @@ router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) 
 router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req
 
-  models.Pack.update(
+  models.Recipe.update(
     { title: pack.title },
     { where: { id: pack.id, userId: req.user.id } }
   )
