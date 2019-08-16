@@ -1,6 +1,6 @@
 import { Model } from 'sequelize'
 
-class Menu extends Model {
+class MenuFood extends Model {
   toJSON = () => {
     return {
       id: this.id,
@@ -25,11 +25,11 @@ class Menu extends Model {
         }
       },
       {
-        tableName: 'menus',
+        tableName: 'menu_food',
         sequelize
       }
     )
   }
 }
 
-export default Menu
+export default MenuFood

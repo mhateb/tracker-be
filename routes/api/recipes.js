@@ -1,6 +1,8 @@
 import passport from 'passport'
 import express from 'express'
 
+import controllers from 'controllers'
+
 import models from '../../db/models'
 import { getMessageError } from '../../utils/errors'
 
@@ -36,22 +38,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
     })
 })
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  models.Recipe.findAll({
-    where: {
-      userId: req.user.id
-    }
-  })
-    .then(packs => {
-      res.json({
-        packs: packs
-      })
-    })
-    .catch((err) => {
-      console.log(err)
-      getMessageError(res, err)
-    })
-})
+router.get('/', passport.authenticate('jwt', { session: false }), controllers.recipesController.getAllRecipes)
 
 router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { body: { pack } } = req

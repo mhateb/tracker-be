@@ -4,10 +4,10 @@ class IngridientRecipes extends Model {
   toJSON = () => {
     return {
       id: this.id,
-      volume_id: this.volumeId,
+      volumeId: this.volumeId,
       volume: this.volume,
-      ingridient_id: this.ingridientId,
-      recipe_id: this.recipeId
+      ingridientId: this.ingridientId,
+      recipeId: this.recipeId
     }
   }
 

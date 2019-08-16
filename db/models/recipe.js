@@ -5,15 +5,14 @@ class Recipe extends Model {
     return {
       id: this.id,
       title: this.title,
-      mini_description: this.miniDescription,
       description: this.description,
-      default_portion: this.defaultPortion,
+      defaultPortion: this.defaultPortion,
       cooking_time: this.cookingTime,
-      user_id: this.userId,
-      catalog_id: this.catalogId,
-      menu_id: this.menuId,
-      dinner_id: this.dinnerId,
-      kitchen_id: this.kitchenId
+      userId: this.userId,
+      catalogId: this.catalogId,
+      menuId: this.menuId,
+      dinnerId: this.dinnerId,
+      kitchenId: this.kitchenId
     }
   }
 
@@ -26,13 +25,6 @@ class Recipe extends Model {
           primaryKey: true
         },
         title: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-          validate: {
-            notEmpty: true
-          }
-        },
-        miniDescription: {
           type: DataTypes.TEXT,
           allowNull: false,
           validate: {
@@ -83,24 +75,24 @@ class Recipe extends Model {
       }
     })
 
-    this.belongsTo(models.Menu, {
+    this.belongsTo(models.MenuFood, {
       foreignKey: {
         name: 'menuId',
-        allowNull: true
+        allowNull: false
       }
     })
 
     this.belongsTo(models.Dinner, {
       foreignKey: {
         name: 'dinnerId',
-        allowNull: true
+        allowNull: false
       }
     })
 
     this.belongsTo(models.Kitchen, {
       foreignKey: {
         name: 'kitchenId',
-        allowNull: true
+        allowNull: false
       }
     })
   }

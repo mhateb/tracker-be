@@ -7,6 +7,8 @@ class User extends Model {
     return {
       id: this.id,
       email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
       token: this.generateJWT()
     }
   }

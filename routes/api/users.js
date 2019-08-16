@@ -2,72 +2,14 @@ import passport from 'passport'
 import express from 'express'
 
 import auth from '../auth'
-import models from '../../db/models'
-import { getMessageError } from '../../utils/errors'
+import controllers from 'controllers'
 
 const router = express.Router()
 
-router.post('/register', auth.optional, (req, res) => {
-  const { body: { user } } = req
+router.post('/register', auth.optional, controllers.usersController.registerUser)
 
-  console.log(req.body)
+router.post('/login', auth.optional, controllers.usersController.loginUser)
 
-  models.User.findOrCreate({
-    where: {
-      email: user.email
-    },
-    defaults: {
-      username: user.username,
-      salt: 'salt',
-      hash: user.password,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      about: 'about hahahah'
-    }
-  })
-    .then(([newUser, created]) => {
-      if (created) {
-        res.json({ user: newUser.toJSON() })
-      } else {
-        res.status(422).json({
-          errors: {
-            email: 'email is already taken'
-          }
-        })
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-      getMessageError(res, err)
-    })
-})
-
-router.post('/login', auth.optional, (req, res) => {
-  const { body: { user } } = req
-
-  models.User.findOne({
-    where: {
-      email: user.email
-    }
-  })
-    .then(foundUser => {
-      if (foundUser == null) {
-        res.status(401).json({ message: 'no such user found' })
-      } else {
-        foundUser.validatePassword(user.password)
-          ? res.status(200).json({ user: foundUser.toJSON() })
-          : res.status(401).json({ message: 'passwords did not match' })
-      }
-    })
-    .catch((err) => {
-      getMessageError(res, err)
-    })
-})
-
-router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  return res.json({
-    user: req.user.toJSON()
-  })
-})
+router.get('/current', passport.authenticate('jwt', { session: false }), controllers.usersController.getCurrentUser)
 
 export default router
