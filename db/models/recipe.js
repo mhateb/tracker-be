@@ -7,7 +7,7 @@ class Recipe extends Model {
       title: this.title,
       description: this.description,
       defaultPortion: this.defaultPortion,
-      cooking_time: this.cookingTime,
+      cookingTime: this.cookingTime,
       userId: this.userId,
       catalogId: this.catalogId,
       menuId: this.menuId,

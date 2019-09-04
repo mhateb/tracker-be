@@ -58,7 +58,6 @@ class User extends Model {
         },
         about: {
           type: DataTypes.STRING,
-          unique: true,
           allowNull: true,
           validate: {
             min: 6,
