@@ -6,44 +6,53 @@ import errorHandler from 'errorhandler'
 import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 
+<<<<<<< HEAD
 import models from 'models'
 import routes from 'routes'
+=======
+import models from './db/models'
+import routes from './routes'
+>>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
 import swaggerDocument from './config/swagger'
 
 const app = express()
 const PORT = 5000
 const isProduction = process.env.NODE_ENV === 'production'
 
+require('./db/models/user')
+require('./config/passport')
+
+models.IngridientRecipes.sync()
+models.RecipeComment.sync()
 models.sequelize.sync()
   .then(() => {
-    console.log('Nice! Database looks fine')
+    console.log('Database is fine')
   })
   .catch((err) => {
     console.log(err, 'Something went wrong with the Database Update!')
   })
 
 if (isProduction) {
-  app.use(cors({
-    origin: 'https://tracker-fe.herokuapp.com'
-  }))
+  app.use(cors({ origin: 'https://tracker-fe.herokuapp.com' }))
 } else {
   app.use(cors())
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+  app.use(errorHandler())
 }
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
+<<<<<<< HEAD
 
 require('./db/models/user')
 require('./config/passport')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+=======
+>>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
 app.use(routes)
-
-if (!isProduction) {
-  app.use(errorHandler())
-}
 
 app.use((req, res, err) => {
   res.status(err.status || 500)

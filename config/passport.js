@@ -1,7 +1,11 @@
 import passport from 'passport'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
+<<<<<<< HEAD
 import models from 'models'
+=======
+import models from '../db/models'
+>>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
 
 const jwtOptions = {}
 

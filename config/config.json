@@ -1,5 +1,4 @@
 {
-
   "production": {
     "username": "qunnomeanqnoxn",
     "password": "56d36042f42dd894377b6eae5e46d396a50dca40c6e6c9ebd120b046e40e281d",
@@ -16,9 +15,9 @@
     "dialect": "postgres"
   },
   "development": {
-    "username": "tracker_admin",
+    "username": "kulinar_admin",
     "password": "esenin1923",
-    "database": "tracker_db",
+    "database": "kulinar_db",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
