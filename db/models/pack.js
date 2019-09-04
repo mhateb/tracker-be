@@ -1,18 +1,7 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
 class Pack extends Model {
-  toJSON = () => {
-    return {
-      id: this.id,
-      title: this.title,
-      userId: this.userId,
-      trueAnswers: this.trueAnswers,
-      falseAnswers: this.falseAnswers,
-      rating: this.rating
-    }
-  }
-
-  static init(sequelize, DataTypes) {
+  static init (sequelize, DataTypes) {
     return super.init(
       {
         id: {
@@ -29,7 +18,7 @@ class Pack extends Model {
         },
         trueAnswers: {
           type: DataTypes.INTEGER,
-          allowNull: false    
+          allowNull: false
         },
         falseAnswers: {
           type: DataTypes.INTEGER,
@@ -37,23 +26,27 @@ class Pack extends Model {
         },
         rating: {
           type: DataTypes.INTEGER,
-          allowNull: false  
+          allowNull: false
+        },
+        isFeed: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false
         }
       },
-      { 
-        tableName: "packs",
+      {
+        tableName: 'packs',
         sequelize
       }
     )
   }
 
-  static associate(models) {
+  static associate (models) {
     this.belongsTo(models.User, {
       foreignKey: {
-        name: "userId",
+        name: 'userId',
         allowNull: true
       }
-    });
+    })
   }
 }
 

@@ -10,6 +10,18 @@
     ]
   ],
   "plugins": [
-    "@babel/plugin-proposal-class-properties"
+    "@babel/plugin-proposal-class-properties",
+    [
+      "module-resolver", {
+        "root": ["./"],
+        "alias": {
+          "controllers": "./controllers",
+          "models": "./db/models",
+          "routes": "./routes",
+          "utils": "./utils",
+          "config": "./config"
+        }
+      }
+    ]
   ]
 }

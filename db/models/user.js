@@ -1,18 +1,10 @@
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
 class User extends Model {
-  toJSON = () => {
-    return {
-      id: this.id,
-      email: this.email,
-      token: this.generateJWT()
-    }
-  }
-
   generateJWT = () => {
-    return jwt.sign({id: this.id}, 'SECRET_KEY')
+    return jwt.sign({ id: this.id }, 'SECRET_KEY')
   }
 
   validatePassword = (password) => {
@@ -21,7 +13,7 @@ class User extends Model {
     return this.hash === hash
   }
 
-  static init(sequelize, DataTypes) {
+  static init (sequelize, DataTypes) {
     return super.init(
       {
         id: {
@@ -61,11 +53,11 @@ class User extends Model {
           }
         }
       },
-      { 
-        tableName: "users",
+      {
+        tableName: 'users',
         sequelize
-      },
-    );
+      }
+    )
   }
 }
 

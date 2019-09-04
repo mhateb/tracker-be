@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize'
 
-import User from "./user";
-import Pack from "./pack";
-import Word from "./word";
-import configJSON from '../config/config'
+import User from './user'
+import Pack from './pack'
+import Word from './word'
+import configJSON from '../../config/config'
 
 const env = process.env.NODE_ENV || 'development'
 const config = configJSON[env]
@@ -13,16 +13,15 @@ const models = {
   User: User.init(sequelize, Sequelize),
   Pack: Pack.init(sequelize, Sequelize),
   Word: Word.init(sequelize, Sequelize)
-};
-
+}
 
 Object.values(models)
-  .filter(model => typeof model.associate === "function")
-  .forEach(model => model.associate(models));
+  .filter(model => typeof model.associate === 'function')
+  .forEach(model => model.associate(models))
 
 const db = {
   ...models,
   sequelize
-};
+}
 
 export default db

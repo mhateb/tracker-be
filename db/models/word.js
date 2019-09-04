@@ -1,16 +1,7 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
 class Word extends Model {
-  toJSON = () => {
-    return {
-      id: this.id,
-      original: this.original,
-      translate: this.translate,
-      packId: this.packId
-    }
-  }
-
-  static init(sequelize, DataTypes) {
+  static init (sequelize, DataTypes) {
     return super.init(
       {
         id: {
@@ -31,22 +22,22 @@ class Word extends Model {
           validate: {
             notEmpty: true
           }
-        },
+        }
       },
       {
-        tableName: "words",
+        tableName: 'words',
         sequelize
       }
     )
   }
 
-  static associate(models) {
+  static associate (models) {
     this.belongsTo(models.Pack, {
       foreignKey: {
-        name: "packId",
+        name: 'packId',
         allowNull: true
       }
-    });
+    })
   }
 }
 

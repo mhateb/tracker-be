@@ -1,89 +1,20 @@
 import passport from 'passport'
 import express from 'express'
 
-import models from '../../models'
-import { getMessageError } from '../../utils/errors'
+import controllers from 'controllers'
 
 const router = express.Router()
 
-router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { body: { word } } = req
+router.post('/', passport.authenticate('jwt', { session: false }),
+  controllers.wordsController.create)
 
-  models.Word.findOrCreate({
-    where: {
-      original: word.original,
-      translate: word.translate,
-      packId: word.pack_id
-    }
-  })
-    .spread((newWord, created) => {
-      if (created) {
-        res.json({ word: newWord.toJSON() })
-      } else {
-        res.status(422).json({
-          errors: {
-            word: 'is already taken'
-          }
-        })
-      }
-    })
-    .catch((err) => {
-      getMessageError(res, err)
-    })
-})
+router.get('/', passport.authenticate('jwt', { session: false }),
+  controllers.wordsController.getByPack)
 
-router.post('/all', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { body: { pack } } = req
+router.delete('/', passport.authenticate('jwt', { session: false }),
+  controllers.wordsController.deleteWord)
 
-  models.Word.findAll({
-    where: {
-      packId: pack.id
-    }
-  })
-    .then(words => {
-      res.json({
-        words: words
-      })
-    })
-    .catch(function (err) {
-      getMessageError(res, err)
-    })
-})
-
-router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { body: { word } } = req
-
-  models.Word.destroy({
-    where: {
-      id: word.id,
-      packId: word.pack_id
-    }
-  })
-    .then((deletedRecord) => {
-      if (deletedRecord === 1) {
-        res.status(200).json({ message: 'Deleted successfully' })
-      } else {
-        res.status(404).json({ message: 'record not found' })
-      }
-    })
-    .catch((err) => {
-      getMessageError(res, err)
-    })
-})
-
-router.post('/update', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { body: { word } } = req
-
-  models.Word.update(
-    { original: word.original, translate: word.translate },
-    { where: { id: word.id, packId: word.pack_id } }
-  )
-    .then(result =>
-      res.status(200).json({ message: 'word was updated' })
-    )
-    .catch((err) => {
-      getMessageError(res, err)
-    })
-})
+router.put('/', passport.authenticate('jwt', { session: false }),
+  controllers.wordsController.update)
 
 export default router
