@@ -6,13 +6,8 @@ import errorHandler from 'errorhandler'
 import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 
-<<<<<<< HEAD
 import models from 'models'
 import routes from 'routes'
-=======
-import models from './db/models'
-import routes from './routes'
->>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
 import swaggerDocument from './config/swagger'
 
 const app = express()
@@ -22,8 +17,6 @@ const isProduction = process.env.NODE_ENV === 'production'
 require('./db/models/user')
 require('./config/passport')
 
-models.IngridientRecipes.sync()
-models.RecipeComment.sync()
 models.sequelize.sync()
   .then(() => {
     console.log('Database is fine')
@@ -44,14 +37,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
-<<<<<<< HEAD
 
 require('./db/models/user')
 require('./config/passport')
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-=======
->>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
 app.use(routes)
 
 app.use((req, res, err) => {

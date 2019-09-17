@@ -4,7 +4,8 @@ const create = (req, res) => {
   const { body: { word } } = req
 
   models.Word.create({
-    ...word
+    ...word,
+    packId: word.pack_id
   })
     .then((newWord) => {
       res.json({ word: newWord, status: 200 })
@@ -15,13 +16,11 @@ const create = (req, res) => {
 }
 
 const getByPack = (req, res) => {
-  const { user, query: { packId } } = req
-
-  console.log(packId)
+  const { user, body: { pack: { id } } } = req
 
   models.Pack.findOne({ where: {
     userId: user.id,
-    id: packId
+    id: id
   } })
     .then((foundPack) => {
       return models.Word.findAll({
@@ -36,7 +35,6 @@ const getByPack = (req, res) => {
       })
     })
     .catch((err) => {
-      console.log(err)
       res.json({ error: err.message })
     })
 }

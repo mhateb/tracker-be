@@ -5,10 +5,10 @@ import controllers from 'controllers'
 
 const router = express.Router()
 
-router.post('/', passport.authenticate('jwt', { session: false }),
+router.post('/new', passport.authenticate('jwt', { session: false }),
   controllers.wordsController.create)
 
-router.get('/', passport.authenticate('jwt', { session: false }),
+router.post('/', passport.authenticate('jwt', { session: false }),
   controllers.wordsController.getByPack)
 
 router.delete('/', passport.authenticate('jwt', { session: false }),

@@ -10,40 +10,19 @@ const registerUser = (req, res) => {
     defaults: {
       username: user.username,
       salt: 'salt',
-<<<<<<< HEAD
       hash: user.password
-=======
-      hash: user.password,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      about: 'about hahahah'
->>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
     }
   })
     .then(([newUser, created]) => {
       if (created) {
-<<<<<<< HEAD
-        res.json({ user: newUser, status: 200 })
+        res.json({ user: { ...newUser, token: newUser.generateJWT() }, status: 200 })
       } else {
         res.status(422).json({ error: 'Already taken' })
       }
     })
     .catch((err) => {
-      res.json({ error: err })
-=======
-        res.json({ user: newUser.toJSON() })
-      } else {
-        res.status(422).json({
-          errors: {
-            email: 'email is already taken'
-          }
-        })
-      }
-    })
-    .catch((err) => {
       console.log(err)
-      res.json({ error: err.message })
->>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45
+      res.json({ error: err })
     })
 }
 
@@ -65,6 +44,7 @@ const loginUser = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err)
       res.json({ error: err })
     })
 }

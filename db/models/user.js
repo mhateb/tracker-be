@@ -3,19 +3,6 @@ import jwt from 'jsonwebtoken'
 import { Model } from 'sequelize'
 
 class User extends Model {
-<<<<<<< HEAD:db/models/user.js
-=======
-  toJSON = () => {
-    return {
-      id: this.id,
-      email: this.email,
-      firstName: this.firstName,
-      lastName: this.lastName,
-      token: this.generateJWT()
-    }
-  }
-
->>>>>>> 9e7754b362bfd95597dec1feaac5821a3fefff45:db/models/user.js
   generateJWT = () => {
     return jwt.sign({ id: this.id }, 'SECRET_KEY')
   }
@@ -24,6 +11,14 @@ class User extends Model {
     const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex')
 
     return this.hash === hash
+  }
+
+  toJSON = () => {
+    return {
+      id: this.id,
+      email: this.email,
+      token: this.generateJWT()
+    }
   }
 
   static init (sequelize, DataTypes) {
@@ -37,30 +32,6 @@ class User extends Model {
         username: {
           type: DataTypes.STRING,
           unique: true,
-          allowNull: true,
-          validate: {
-            min: 6,
-            max: 20
-          }
-        },
-        firstName: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            min: 6,
-            max: 20
-          }
-        },
-        lastName: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            min: 6,
-            max: 20
-          }
-        },
-        about: {
-          type: DataTypes.STRING,
           allowNull: true,
           validate: {
             min: 6,
