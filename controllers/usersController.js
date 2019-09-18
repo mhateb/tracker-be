@@ -15,7 +15,7 @@ const registerUser = (req, res) => {
   })
     .then(([newUser, created]) => {
       if (created) {
-        res.json({ user: { ...newUser, token: newUser.generateJWT() }, status: 200 })
+        res.status(200).json({ user: newUser.toJSON() })
       } else {
         res.status(422).json({ error: 'Already taken' })
       }
